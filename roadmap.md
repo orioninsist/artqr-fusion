@@ -1328,3 +1328,98 @@ Yani evet, önceki cevabım eksikti. Tam ticari özellik listesi şöyle toparla
 10. AI prompt ile logo/görsel üretme opsiyonu
 Bence bir sonraki aşamada notebook’a en değerli ek hücre şu olurdu: “Style Builder Cell”. Yani müşteri isteğine göre shape, color_mode, logo_mode, background_mode, output_pack seçilen tek bir ayar hücresi. Sonra finalden önce bu seçeneklere göre 5-10 test edilmiş çıktı üretir.
 
+# Page 10
+
+Bence bu örnekler büyük ihtimalle AI ile sıfırdan logo üretimi değil. Normal logoyu alıp, kod veya tasarım aracıyla şu stile çevirmişler:
+
+Halftone / dotted halftone / stipple effect / dot matrix effect
+
+Türkçe söylersek: noktalı tram efekti, halftone noktalama, piksel-nokta işleme, benekli logo efekti.
+
+Bu görüntüdeki olay şu:
+
+Orijinal logo korunuyor.
+Logo renkleri ve şekli basitleştiriliyor.
+Üstüne QR modül mantığına uygun küçük noktalar, artılar veya karecikler yerleştiriliyor.
+QR’ın 3 köşe gözü özellikle büyük ve temiz bırakılıyor.
+İnsan uzaktan logoyu görüyor, kamera ise noktaların/kontrastın içinden QR yapısını okuyor.
+Yani bu iş çok muhtemel şöyle yapılmış:
+
+Normal logo alınır.
+Logo vektör ya da PNG olarak temizlenir.
+QR kod üretilir.
+QR modülleri kare yerine nokta / artı / küçük kare / yuvarlak olarak çizilir.
+Logo maskesi içinde kalan alanlara markanın renkleri verilir.
+Finder gözleri büyük halka şeklinde yeniden çizilir.
+Sonuç QR okuyucuyla test edilir.
+AI burada belki sadece yardımcı olabilir: logo temizleme, arka plan silme, renk düzenleme, düşük kaliteli logoyu iyileştirme gibi. Ama asıl “pikselli noktalı QR logo” hissi büyük ihtimalle kodla veya Illustrator/Photoshop script efektiyle yapılmış.
+
+Senin aradığın doğru terimler:
+
+Halftone logo QR code
+Dotted QR code logo
+Dot matrix QR code
+Stipple logo effect
+Logo-shaped QR code
+QR code design on logo
+Custom branded QR code
+Vector halftone QR
+Kısaca: Bu görünümün adı en net halftone QR / dotted logo QR. Bizim tarafta bunu kodla yapabiliriz. Mevcut notebook’a “halftone logo render” modu eklenirse bu tarza yaklaşırız.
+
+# Page 11
+
+Evet, baktım. Rakiplerde gördüğün şeyin adı genelde şu isimlerle geçiyor:
+
+Logo-shaped QR code, custom QR code design, halftone QR code, dot-matrix QR, branded QR, bazen de QR code design on logo diye satılıyor.
+
+Senin notebook şu anda daha çok şu işi yapıyor: görsel + QR maskesi + okunabilirlik testi. Yani altyapı fena değil, hatta luminance_fusion, finder koruma, quiet zone koruma, çoklu decoder testi gibi doğru ticari parçalar var.
+
+Ama rakip örneklerdeki fark şu:
+
+QR, logonun üstüne bindirilmiş gibi değil; logo QR’a dönüştürülmüş gibi duruyor.
+Bizde daha çok “sanatsal görselin içine QR okunabilirliği enjekte etme” var. Rakipte ise logo silueti korunuyor, QR noktaları o siluetin içinde tasarım dili gibi çalışıyor.
+
+Finder gözleri tasarım elemanı yapılmış.
+Rakiplerde köşe marker’ları büyük, kalın çemberli, renkli, logoyla uyumlu. Bizde finder stilleri var ama daha klasik/temiz QR hissinde kalıyor.
+
+Halftone/dot texture eksik.
+Görsellerdeki ana numara: QR modülleri kare değil, küçük nokta/çapraz/mini desen gibi. Logo yüzeyi de bu noktalı tarama ile oluşturuluyor. Bizde dot, rounded, diamond gibi modül şekilleri var ama “logo alanına göre yoğunluklu noktalama / halftone” sistemi yok.
+
+Logo dış kontur ve negatif alan daha güçlü.
+Rakiplerde marka şekli uzaktan hemen okunuyor: UPS kalkanı, Burger King yuvarlağı, KFC yüzü, TikTok ikonu. Bizim sistem görseli kare canvas’a hazırlayıp QR ile karıştırıyor; logo formunu özel olarak segment edip korumuyor.
+
+Kompozisyon paketi eksik.
+“SCAN HERE”, sticker border, CTA, marka renkli frame, sosyal medya preview gibi şeyler kısmen var ama rakiplerde bu iş ayrı bir ürün tasarımı gibi: QR + etiket + çağrı metni + dekoratif sınır.
+
+Bence ilk konuşmamız gereken ana eksikler bunlar:
+
+Eksik 1: Logo maskesi / shape extraction
+Logo arka plandan ayrılmalı. QR noktaları tüm kareye değil, logo siluetinin içine ve çevresine kontrollü yayılmalı.
+
+Eksik 2: Halftone QR render modu
+Kare modüller yerine küçük noktalar, artı işaretleri, yuvarlaklar veya mikro kareler ile “desenli QR” üretme modu lazım.
+
+Eksik 3: Designer finder eyes
+Köşe gözleri için kalın halka, iç renk, dış stroke, yuvarlak/circle finder gibi daha agresif seçenekler lazım.
+
+Eksik 4: Logo-first layout
+Şu an QR-first. Rakipler logo-first çalışıyor: önce logo okunuyor, sonra QR okutuluyor. Bizde de “logo ana form, QR onun dokusu” yaklaşımı eklenmeli.
+
+Eksik 5: Görsel kalite testi sadece QR okuma değil
+Şu testler eklenmeli:
+
+QR okuyucular: pyzbar, OpenCV, ZXing zaten var.
+Uzak önizleme testi: 128px / 256px küçültünce logo hala tanınıyor mu?
+Finder kontrast testi: 3 köşe marker yeterince ayrışıyor mu?
+Quiet zone testi: etraf temiz mi?
+Logo silhouette coverage: logo formu ne kadar korunmuş?
+Renk/kontrast raporu: siyah-beyaz eşik alınca QR yapısı çıkıyor mu?
+Benim önerim: koda müdahale etmeden önce hedefi iki stile ayıralım.
+
+Stil A: Rakiplerdeki gibi Logo Halftone QR
+UPS, Burger King, Google, KFC örneklerine yakın. Logo şekli baskın, QR noktaları tasarım dokusu gibi.
+
+Stil B: Sticker / CTA QR
+Airbnb örneği gibi: çerçeve, “SCAN HERE”, “VISIT OUR WEBSITE”, renkli finder gözleri, daha ticari etiket görünümü.
+
+Senin gönderdiğin örneklerin çoğu Stil A. Bence önce buna odaklanmalıyız. Onaylarsan sonraki adımda notebook’a dokunmadan önce sana net bir teknik plan çıkarırım: hangi yeni parametreler eklenecek, hangi fonksiyonlar değişecek, hangi test raporu üretilece
