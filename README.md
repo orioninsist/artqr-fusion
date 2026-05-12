@@ -1,146 +1,215 @@
 # ArtQR Fusion
 
-ArtQR Fusion is a Google Colab notebook for creating readable artistic QR codes from a logo, brand image, or artwork. It does not simply paste a logo on top of a QR code. The notebook generates a clean QR code, blends the QR structure into the artwork with luminance and halftone logic, protects the finder patterns and quiet zone, then validates the result with QR decoders before packaging delivery files.
+ArtQR Fusion, logo veya artwork gorselini okunabilir QR kod ile birlestiren Google Colab tabanli bir ticari teslim pipeline'idir. Projenin amaci, Fiverr, Upwork, Bionluk ve benzeri freelancer platformlarinda satilabilecek profesyonel "branded / artistic QR code" hizmetleri icin hizli, test edilebilir ve paketlenmis cikti uretmektir.
 
-The project is designed for Fiverr, Upwork, and client delivery workflows where the final result must look branded and still scan reliably.
+Bu proje sadece logoyu QR kodun ortasina yapistirmaz. Notebook, logo maskesini analiz eder, QR modul cizimini logo ve kontrast alanlarina gore uyarlar, farkli adaylar uretir, otomatik QR okuma testleri yapar ve musteriye teslim edilebilecek ZIP paketi hazirlar.
 
-## What It Produces
+## English Summary
 
-- Logo-aware artistic QR codes
-- Halftone logo QR designs
-- Clean styled QR alternatives
-- Print-ready PNG and PDF outputs
-- JPG delivery files
-- Transparent PNG variants when enabled
-- Clean vector QR SVG for the non-artistic base QR
-- Social media preview image
+ArtQR Fusion is a Google Colab workflow for creating readable, logo-aware, artistic QR codes for freelance delivery. It combines a client logo or artwork with a scannable QR code, generates multiple visual candidates, validates readability with QR decoders, and exports a commercial delivery package.
+
+It is designed for sellers who want to offer branded QR codes for restaurants, business cards, product labels, social media profiles, events, packaging, luxury brands, and marketing campaigns.
+
+## Projenin Amaci
+
+Bu repo, freelancer olarak sunulabilecek su hizmeti destekler:
+
+> Markaniza ozel, logolu, okunabilir, baskiya ve dijital kullanima hazir sanatsal QR kod tasarimi.
+
+Kullanim senaryolari:
+
+- Restoran menu QR kodlari
+- Instagram, Linktree, web sitesi veya WhatsApp QR kodlari
+- Kartvizit ve kurumsal kimlik QR kodlari
+- Urun etiketi ve ambalaj QR kodlari
+- Etkinlik bileti, davetiye ve kampanya QR kodlari
+- Luks marka, sosyal medya ve portfolyo QR gorselleri
+- Wi-Fi, vCard, e-posta, telefon, SMS, konum ve takvim QR kodlari
+
+## What This Project Offers
+
+- Logo-aware artistic QR generation
+- Clean QR and fused/artistic QR outputs
+- Multiple style presets for commercial use
+- QR readability checks with decoder testing
+- High-resolution PNG output up to 4096 px
+- Print-ready PNG/PDF options
+- Transparent PNG and JPG export options
+- Clean SVG/EPS vector QR export for base QR
+- Social preview image generation
+- Client delivery brief, quality summary, test report, and ZIP package
+
+## Notebook Ozeti
+
+Ana dosya: `qrcode_logo_merge.ipynb`
+
+Notebook akis olarak su isi yapar:
+
+1. Colab ortaminda gerekli kutuphaneleri kurar.
+2. Musteri logosu veya artwork dosyasini yukler.
+3. QR icine yazilacak veriyi olusturur veya hazir QR gorselini kullanir.
+4. Kalite profilini ve servis paketini secer.
+5. Logo/artwork gorselini hazirlar.
+6. Logo-aware QR maskesi ve temiz QR uretir.
+7. Farkli fusion guclerinde aday gorseller olusturur.
+8. Adaylari QR okuyucularla test eder.
+9. En iyi okunabilir final gorseli secer.
+10. Ticari teslim dosyalarini ve `qr_fusion_delivery.zip` paketini hazirlar.
+
+## Desteklenen QR Icerikleri
+
+Notebook su QR veri tiplerini destekler:
+
+- URL
+- Duz metin
+- E-posta
+- Telefon
+- SMS
+- WhatsApp
+- Wi-Fi
+- Konum
+- vCard
+- Takvim etkinligi
+- Raw/custom QR payload
+
+## Stil ve Portfolyo Presetleri
+
+Hazir portfolyo ornekleri:
+
+- `restaurant_qr`
+- `instagram_linktree_qr`
+- `business_card_qr`
+- `product_label_qr`
+- `luxury_brand_qr`
+- `event_ticket_qr`
+- `colorful_logo_qr`
+- `black_white_clean_qr`
+- `halftone_logo_qr`
+- `social_media_preview_qr`
+
+Hazir stil presetleri:
+
+- `business_clean`
+- `luxury`
+- `colorful`
+- `restaurant`
+- `event`
+- `product_label`
+- `social_media`
+- `black_white_clean`
+- `halftone_logo`
+
+## Freelancer Paketleri
+
+### Basic
+
+Basit ve temiz logolu QR teslimi.
+
+- Clean/branded QR
+- Final PNG/JPG
+- Hazir okunabilir QR
+- Temel test raporu
+- Dijital kullanim icin uygun teslim
+
+### Standard
+
+Web, sosyal medya ve baski icin daha guclu teslim paketi.
+
+- Basic paket icerigi
+- Ek stil varyasyonlari
+- Print-ready PNG/PDF
+- Sosyal medya onizleme gorseli
+- Clean QR SVG
+- Musteri teslim notu
+
+### Premium
+
+En iyi gorsel kalite ve ticari teslim icin onerilen paket.
+
+- Logo-aware halftone final QR
+- Yuksek cozunurluklu 4096 px cikti
+- Transparent PNG
+- Layout pack
+- Print-ready dosyalar
+- Test raporu
+- Client quality summary
+- Gig readiness checklist
+- Teslime hazir ZIP paketi
+
+## Fiverr / Upwork / Bionluk Icin Ilan Taslagi
+
+### Turkce Baslik
+
+Markaniza Ozel Okunabilir Logolu ve Sanatsal QR Kod Tasarlayacagim
+
+### English Title
+
+I will design a scannable custom branded QR code with your logo
+
+### Turkce Aciklama
+
+Markaniz, restoraniniz, kartvizitiniz, urun etiketiniz veya sosyal medya hesabiniz icin profesyonel, okunabilir ve logolu QR kod tasarimi hazirliyorum.
+
+Standart QR kodlar genellikle sade ve markadan kopuk gorunur. Bu hizmette logonuzu veya artwork dosyanizi QR kod ile gorsel olarak birlestiriyorum. QR kodunuz hem markali gorunur hem de okuma testi yapilarak teslim edilir.
+
+Teslim edebilecegim dosyalar:
+
+- Yuksek cozunurluklu PNG
+- JPG
+- Transparent PNG
+- Print-ready PNG/PDF
+- Clean QR SVG
+- Sosyal medya onizleme gorseli
+- QR test raporu
+- Teslim ZIP paketi
+
+Lutfen siparis vermeden once logonuzu, QR icine yazilacak link/metin bilgisini ve kullanacaginiz alani gonderin. Ornek: menu, kartvizit, urun etiketi, web sitesi, Instagram, WhatsApp, etkinlik bileti.
+
+### English Description
+
+I will create a custom branded QR code for your business, restaurant, product label, business card, event, social media profile, or marketing campaign.
+
+Instead of placing a logo on top of a basic QR code, I use a logo-aware workflow that blends your logo or artwork with a scannable QR design. Each final delivery is tested for readability before delivery.
+
+Possible delivery files:
+
+- High-resolution PNG
+- JPG
+- Transparent PNG
+- Print-ready PNG/PDF
+- Clean QR SVG
+- Social media preview
 - QR test report
-- Customer delivery brief
-- Fiverr / Upwork readiness checklist
-- ZIP delivery package
+- Delivery ZIP package
 
-Important vector note: the artistic logo-fused QR is delivered as high-resolution raster artwork, usually PNG/JPG/PDF. The clean base QR can be exported as SVG. Do not sell the artistic halftone/logo-fused result as a true editable vector unless it has been manually vectorized and retested.
+Please send your logo/artwork, the link or data for the QR code, and where you plan to use it, such as menu, business card, product label, website, Instagram, WhatsApp, or event ticket.
 
-## Google Colab Workflow
+## Musteriden Istenilecek Bilgiler
 
-This repository is Colab-first. The intended workflow is:
+- Logo veya artwork dosyasi
+- QR icine yazilacak link, metin veya iletisim bilgisi
+- Kullanim alani: baski, web, sosyal medya, ambalaj, menu vb.
+- Tercih edilen renk veya marka rengi
+- Istenen dosya formatlari
+- Baskiya gidecekse olcu ve DPI bilgisi
 
-1. Open `qrcode_logo_merge.ipynb` in Google Colab.
-2. Run the setup cells.
-3. Upload the customer logo or artwork.
-4. Enter the customer QR link or text in `qr_data`.
-5. In the commercial form, choose:
-   - `service_tier`: `basic`, `standard`, or `premium`
-   - `portfolio_example`: the closest use case
-   - `style_preset`: optional manual style override
-6. Run the remaining cells.
-7. Download `qr_fusion_delivery.zip`.
-8. Manually scan the final QR on a phone before sending it to the client.
+## Okunabilirlik ve Kalite Notu
 
-## Service Packages
-
-| Package | Best For | Outputs |
-| --- | --- | --- |
-| Basic | Simple clean branded QR | Final PNG, clean QR, prepared artwork, JPG, test report |
-| Standard | Client-ready branded QR | Basic outputs plus soft/balanced/strong variants, print PNG/PDF, social preview, clean SVG |
-| Premium | Fiverr/Upwork premium delivery | Standard outputs plus logo-aware halftone final, layout pack, transparent variant, customer brief, readiness checklist |
-
-Suggested gig wording:
-
-- Basic: I will create a clean branded QR code with your logo and verify that it scans.
-- Standard: I will create a high-quality artistic QR code package with print-ready files and multiple design variations.
-- Premium: I will create a premium logo-aware artistic QR delivery pack with halftone styling, social preview, print files, and scan test report.
-
-## Portfolio Examples To Generate
-
-Use the notebook's `portfolio_example` dropdown to generate portfolio samples one by one:
-
-1. `restaurant_qr`
-2. `instagram_linktree_qr`
-3. `business_card_qr`
-4. `product_label_qr`
-5. `luxury_brand_qr`
-6. `event_ticket_qr`
-7. `colorful_logo_qr`
-8. `black_white_clean_qr`
-9. `halftone_logo_qr`
-10. `social_media_preview_qr`
-
-Recommended portfolio structure:
-
-```text
-portfolio/
-  01_restaurant_qr.png
-  02_instagram_linktree_qr.png
-  03_business_card_qr.png
-  04_product_label_qr.png
-  05_luxury_brand_qr.png
-  06_event_ticket_qr.png
-  07_colorful_logo_qr.png
-  08_black_white_clean_qr.png
-  09_halftone_logo_qr.png
-  10_social_media_preview_qr.png
-```
-
-## Readability Guarantee
-
-The notebook tests generated QR files with available decoder engines:
+Notebook uretilen QR dosyalarini mevcut decoder motorlariyla test eder:
 
 - `pyzbar` / ZBar
 - OpenCV QR detector
-- ZXing C++ when available
+- ZXing C++ uygun oldugunda
 
-Commercial acceptance is controlled by `min_decoder_passes`. Premium delivery should usually require at least 2 decoder passes. The ZIP package includes a test report showing which files passed, which decoders read them, and what text/link was decoded.
+Freelancer ilaninda kullanilabilecek guvenli ifade:
 
-Practical guarantee wording for gigs:
+> Final QR kodu teslimden once okuma testinden geciriyorum ve test raporu ekleyebiliyorum. Baskili kullanimlarda kagit, murekkep, boyut, isik ve yuzey taramayi etkileyebilecegi icin toplu baski oncesi bir deneme baskisi okutmanizi oneririm.
 
-> I verify the final QR with multiple decoder tools and include a scan test report. For printed use, please test one sample print before mass production because paper, ink, size, lighting, and material can affect scanning.
+En iyi sonuc icin kisa URL, temiz logo, yuksek kontrast ve QR hata duzeltme seviyesi `H` onerilir. Cok uzun linkler QR kodu daha yogun yapar ve sanatsal tasarim alanini azaltir.
 
-## Buyer Brief Questions
+## Teslim Dosyalari
 
-Ask every customer for:
-
-- Target URL or text for the QR code
-- Logo/artwork file, preferably high resolution PNG/SVG/PDF
-- Brand colors or preferred style
-- Usage place: website, menu, sticker, business card, poster, product label, packaging, event ticket
-- Preferred package: Basic, Standard, or Premium
-- Print size if the QR will be printed
-- Any text or layout notes
-
-## Quality Guide
-
-Best results come from:
-
-- Short URLs instead of long tracking links
-- High-resolution, high-contrast logos
-- Simple artwork with clear shapes
-- QR error correction level `H`
-- Quiet zone of 4-6 modules
-- Manual phone scan before delivery
-
-Risk cases:
-
-- Very long URLs create dense QR codes and reduce visual freedom.
-- Thin text inside logos may disappear in halftone styles.
-- Low contrast artwork can need stronger QR contrast.
-- Transparent or dark backgrounds may scan differently across apps.
-- Print materials can reduce contrast, so 300 DPI PDF/PNG should be tested before bulk printing.
-
-## Colab Requirements
-
-The notebook installs dependencies inside Colab:
-
-```bash
-apt-get install -y libzbar0
-pip install "Pillow<12" opencv-python pyzbar segno numpy zxing-cpp
-```
-
-No separate local setup is required for the intended Colab workflow.
-
-## Delivery Files
-
-The generated `qr_fusion_delivery.zip` can include:
+`qr_fusion_delivery.zip` paketi ayarlara gore su dosyalari icerebilir:
 
 - `final_readable_art_qr.png`
 - `clean_qr.png`
@@ -150,32 +219,81 @@ The generated `qr_fusion_delivery.zip` can include:
 - `commercial/art_qr_soft.png`
 - `commercial/art_qr_balanced.png`
 - `commercial/art_qr_strong.png`
-- `commercial/print_ready_300dpi.png`
-- `commercial/print_ready_300dpi.pdf`
-- `commercial/final_delivery.jpg`
+- `commercial/print_ready_...dpi.png`
+- `commercial/print_ready_...dpi.pdf`
+- `commercial/final_readable_art_qr.jpg`
 - `commercial/clean_qr_vector.svg`
+- `commercial/clean_qr_vector.eps`
 - `commercial/social_preview_1080.png`
 - `commercial/qr_test_report.txt`
 - `commercial/customer_delivery_brief.txt`
+- `commercial/client_quality_summary.txt`
 - `commercial/gig_readiness_checklist.txt`
 - `delivery_manifest.txt`
 
-## Fiverr / Upwork Gig Starter
+Onemli vektor notu: Sanatsal logo-fused final genellikle yuksek cozunurluklu raster PNG/JPG/PDF olarak teslim edilir. Clean base QR SVG/EPS olarak verilebilir. Sanatsal halftone final, manuel vektorlestirme ve tekrar test yapilmadan "tam editable vector" olarak satilmamalidir.
 
-Title ideas:
+## Colab Gereksinimleri
 
-- I will create a custom artistic QR code with your logo
-- I will design a scannable branded QR code for print and social media
-- I will create a premium logo QR code with scan test report
+Notebook Google Colab odaklidir ve kurulum hucreleri su paketleri hazirlar:
 
-Short description:
+```bash
+apt-get install -y libzbar0
+pip install "Pillow<12" opencv-python pyzbar segno numpy zxing-cpp
+```
 
-> I will turn your logo or brand artwork into a scannable custom QR code. You will receive high-resolution files for web or print, plus a QR scan test report so you can deliver it with confidence.
+Hedef akis Colab oldugu icin ayri bir lokal kurulum zorunlu degildir.
 
-Revision policy suggestion:
+## Revizyon Politikasi Onerisi
 
-- Basic: 1 revision
-- Standard: 2 revisions
-- Premium: 3 revisions
+- Basic: 1 revizyon
+- Standard: 2 revizyon
+- Premium: 3 revizyon
 
-Do not promise unlimited redesigns. Separate link changes, logo changes, and full style changes as new revisions.
+Link degisikligi, logo degisikligi ve tamamen yeni stil istegi ayni revizyon gibi degerlendirilmemelidir. Bu ayrimi ilanda net yazmak, freelancer platformlarinda is kapsamini korur.
+
+## Rakiplere Gore Konumlandirma
+
+Fiverr, Upwork ve Bionluk gibi platformlarda cok sayida satici basit "logo in the center" QR kod hizmeti sunar. Bu proje o tarz hizmetlerden farkli olarak su noktalara odaklanir:
+
+- Logo/artwork ile QR arasinda daha dogal gorsel birlesim
+- Halftone ve module-level stil uretimi
+- Farkli adaylar arasindan okunabilir final secimi
+- Otomatik QR test raporu
+- Tek dosya yerine ticari teslim paketi
+- Dijital, sosyal medya ve baski kullanimi icin ayri ciktilar
+- Portfolyo ornegi uretmeye uygun preset sistemi
+
+Eksik veya gelistirilebilecek taraflar:
+
+- Web arayuzu henuz yok; su an Colab notebook olarak calisiyor.
+- Musteriye gosterilecek hazir demo galeri repo icinde yok.
+- Gercek cihazlarla manuel test yine teslim oncesi yapilmali.
+- Artistic final raster ciktidir; tamamen vektor sanatsal final icin ek gelistirme gerekir.
+- Freelancer ilaninda daha guclu gorunmek icin 10-20 adet ornek portfolyo gorseli uretilmeli.
+- Siparis surecini hizlandirmak icin hazir brief formu ve fiyat tablosu eklenebilir.
+
+## Onerilen Sonraki Eklemler
+
+Freelancer platformlarinda daha kolay is almak icin projeye su eklemeler yapilabilir:
+
+- `examples/` klasorune restoran, kartvizit, urun etiketi ve sosyal medya ornekleri
+- Before/after gorselleri
+- Fiverr gig kapak gorseli
+- Bionluk hizmet aciklamasi ve paket fiyat metni
+- Musteri brief formu
+- Otomatik demo galeri ureten ek notebook hucreleri
+- Tek komutla portfolyo paketi ureten script
+
+## Kullanim Notlari
+
+En iyi sonuc icin:
+
+- Temiz, yuksek cozunurluklu ve kontrastli logo kullanin.
+- Cok uzun URL yerine kisa URL tercih edin.
+- Baskiya gitmeden once final QR kodu telefonda manuel okutun.
+- Premium teslimlerde `service_tier = premium` ve `quality_mode = en_yuksek_kalite` kullanin.
+
+## Lisans
+
+Lisans bilgisi icin `LICENSE` dosyasina bakin.
