@@ -1,244 +1,159 @@
-# ArtQR Fusion
+# ArtQR Fusion Kullanım Rehberi
 
-ArtQR Fusion, Fiverr/Upwork isleri icin hazirlanmis Google Colab tabanli logolu, sanatsal ve okunabilir QR teslim pipeline'idir. Adobe/Illustrator gerekmez. Musteri logosunu verir veya sen disarida hazirladigin logoyu yuklersin; notebook QR'i uretir, logo ile birlestirir, okunabilirligi test eder, finali gosterir ve ZIP teslim paketi olusturur.
+Bu proje, müşteri logosunu veya görselini okunabilir QR kodla birleştirir. Sevdiğin rakip çıktısının adı bu kodda `competitor_logo_halftone` olarak geçer. Tekniğin gerçek adı: **logo-aware halftone QR**. Mantığı şudur: logo arkada net durur, QR modülleri logo üstüne nokta/plus/piksel gibi basılır, üç köşedeki finder şekilleri yuvarlak ve güçlü kalır. Böylece logo görünür, QR de okunur.
 
-AI logo uretimi bilerek yoktur. Bu projenin isi logo uretmek degil, gelen logoyu profesyonel QR teslimine donusturmektir.
+## Günlük İş Akışı
 
-## Ana Akis
+1. Blok 3'te müşterinin logo/artwork dosyasını yükle.
+2. Blok 4'te QR içine girecek bilgiyi seç.
+3. Blok 5'te `customer_id = "murat"` altında müşteri işini takip et.
+4. Rakip tarzı çıktı için `master_style_choice = "competitor_logo_halftone"` kullan.
+5. Blok 8-13 arası çalıştır. Final dosya `qr_fusion_outputs/final_readable_art_qr.png`, teslim paketi `qr_fusion_delivery.zip` olur.
+6. Teslimden önce final PNG'yi telefonla mutlaka okut.
 
-1. **Blok 1 - Ortam Kurulumu:** Eksik kutuphaneler kurulur.
-2. **Blok 2 - Kutuphaneler:** Pillow, OpenCV, Segno, pyzbar, zxing-cpp ve Colab araclari yuklenir.
-3. **Blok 3 - Gorsel ve QR Giris Formu:** Logo/artwork yuklenir. Istenirse hazir QR gorseli de yuklenebilir.
-4. **Blok 4 - Ana QR, Kalite Profili ve Fusion Ayarlari:** QR icine yazilacak bilgi, kalite ve okunabilirlik ayarlari secilir.
-5. **Blok 5 - Musteri Brief, Ticari Stil ve Teslim Paketi:** Stil, logo, renk, halftone, baski ve teslim dosyalari secilir.
-6. **Blok 8-12 - Uretim:** Temiz QR, adaylar, final, ticari varyasyonlar ve raporlar uretilir.
-7. **Blok 13 - Final Galeri ve ZIP:** Final ve varyasyonlar ekranda gorulur, `qr_fusion_delivery.zip` indirilir.
+## Müşteriden Alacağın Bilgiler
 
-## Blok 3 - Yukleme Ayarlari
-
-| Ayar | Secenek / Aralik | Ne yapar |
+| Bilgi | Koda Yazılacak Yer | Ne İşe Yarar |
 |---|---|---|
-| `upload_mode` | `generate_qr_from_data`, `use_uploaded_qr_image` | Normalde QR'i form bilgilerinden uretir. Hazir QR varsa ikinci secenek kullanilir. |
-| `upload_artwork_image` | `True/False` | `True`: Colab dosya yukleme acar. `False`: dosya yolu elle yazilir. |
-| `upload_qr_image_when_needed` | `True/False` | Hazir QR modunda QR gorseli yukletir. |
-| `artwork_path` | metin | Colab disinda calisirken logo dosya yolu. |
-| `uploaded_qr_path` | metin | Hazir QR dosya yolu. |
+| Müşteri adı | `client_name` | Rapor ve teslim notunda görünür. Varsayılan: Murat. |
+| İş kimliği | `customer_id` | Bütün müşteri isteklerini bu ad altında takip edersin. Varsayılan: `murat`. |
+| Sipariş no / not | `order_reference` | Fiverr/Upwork siparişini ayırmak için. |
+| QR linki/metni | `qr_data` | QR okutulunca açılacak asıl bilgi. |
+| QR türü | `qr_content_type` | URL, WhatsApp, WiFi, vCard, telefon, email gibi türü belirler. |
+| Logo/artwork | Blok 3 upload | QR içine işlenecek görsel. |
+| Renk isteği | `customer_brand_hex`, `customer_dark_hex`, `customer_light_hex` | Marka rengi ve kontrast. |
+| Stil isteği | `requested_style_note` | Müşterinin “rakip gibi”, “minimal”, “renkli” gibi notu. |
+| Kullanım yeri | `usage_place` | Web, baskı, menü, kartvizit, sticker gibi kullanım. |
+| Revizyon notu | `revision_note` | Değişiklik istekleri. |
 
-## Blok 4 - QR Icerik Ayarlari
+## Murat Ayarları ve Müşteri Ayarları
 
-| Ayar | Secenek / Aralik | Ne yapar |
+Müşteriden gelen bilgiler `customer_id`, `client_name`, `qr_data`, `qr_content_type`, renk ve stil alanlarına yazılır. Bunlar müşteri isteğidir.
+
+Murat ayarları senin kontrolünde kalır: `quality_mode`, `output_size`, `error_level`, `quiet_zone`, `module_contrast`, `finder_boost`, `halftone_density`, `halftone_logo_strength`, `min_decoder_passes`. Müşteriye sormadan kaliteyi ve okunabilirliği bunlarla yönetirsin.
+
+## En Önemli Stil Seçimi
+
+| Ayar | Ne Seçersen Ne Olur |
+|---|---|
+| `competitor_logo_halftone` | Rakip örneğe en yakın sonuç: logo arkada, plus/nokta halftone üstte, yuvarlak finder. |
+| `full_output_explorer` | Tüm varyasyonları üretir; deneme ve portföy için iyi. |
+| `tumunu_uret` | Premium teslim paketi ve çoklu okunabilir çıktı üretir. |
+| `pixel_dot_matrix` | Logo QR hücrelerine nokta/piksel/plus gibi yedirilir. |
+| `basic_logosuz_duz` | En güvenli, sade, logosuz QR. |
+| `design_from_logo` | Logodan renk alır, markalı tasarım üretir. |
+| `line_variations` | Dikey/yatay çizgili modern varyasyonlar üretir. |
+| `qrbtf_style_pack` | QRBTF benzeri deneysel şekiller üretir. |
+| `custom` | Her şeyi elle ayarlarsın. |
+
+## Blok 4: QR İçerik Ayarları
+
+| Ayar | Seçenek / Aralık | Açıklama |
 |---|---|---|
-| `service_tier` | `basic`, `standard`, `premium` | Paket seviyesini belirler. Premium en kaliteli ve en fazla cikti verir. |
-| `apply_service_tier_to_quality` | `True/False` | Paket secimini kalite ayarlarina otomatik uygular. |
-| `qr_content_type` | `url`, `plain_text`, `email`, `phone`, `sms`, `whatsapp`, `wifi`, `geo_location`, `vcard`, `calendar`, `social_profile`, `payment_link`, `app_store`, `online_menu`, `google_review`, `youtube`, `raw` | QR okutulunca ne acilacagini belirler. Social/payment/app/menu/review/youtube pratikte URL olarak islenir. |
-| `qr_data` | metin | Ana link veya metin. URL, payment link, menu, YouTube, Google review gibi islerde buraya link yazilir. |
-| `expected_qr_data` | metin | Hazir QR kullaniyorsan testte beklenen sonucu yazarsin. Bos kalirsa `qr_data` kullanilir. |
-| `contact_name/company/title/phone/email/website/address` | metin | vCard, email, phone, SMS, WhatsApp gibi tiplerde kullanilir. |
-| `message_subject`, `message_body` | metin | Email, SMS, WhatsApp mesaj metni. |
-| `wifi_ssid`, `wifi_password` | metin | WiFi QR bilgileri. |
-| `wifi_security` | `WPA`, `WEP`, `nopass` | WiFi sifreleme tipi. |
-| `wifi_hidden` | `True/False` | Gizli WiFi agi ise `True`. |
-| `geo_latitude`, `geo_longitude` | metin | Konum QR'i icin enlem/boylam. |
-| `event_title/start/end/location` | metin | Takvim etkinligi QR'i. |
+| `service_tier` | `basic`, `standard`, `premium` | Paket seviyesi. Premium en iyi kalite ve en fazla dosya. |
+| `qr_content_type` | `url`, `plain_text`, `email`, `phone`, `sms`, `whatsapp`, `wifi`, `geo_location`, `vcard`, `calendar`, `social_profile`, `payment_link`, `app_store`, `online_menu`, `google_review`, `youtube`, `raw` | QR okutulunca ne açılacağını belirler. |
+| `qr_data` | metin/link | Ana link veya metin. |
+| `expected_qr_data` | metin | Hazır QR kullanırsan testte beklenen sonucu yazarsın. Boşsa `qr_data` kullanılır. |
+| `contact_*` | metin | vCard, email, telefon, WhatsApp işlerinde kullanılır. |
+| `wifi_*` | metin/seçenek | WiFi QR üretmek için SSID, şifre, güvenlik tipi. |
+| `geo_latitude`, `geo_longitude` | metin | Konum QR için enlem/boylam. |
+| `event_*` | metin | Takvim etkinliği QR için başlık, başlangıç, bitiş, konum. |
 
-## Blok 4 - Kalite ve Okunabilirlik
+## Blok 4: Kalite ve Okunabilirlik
 
-| Ayar | Secenek / Aralik | Ne yapar |
+| Ayar | Aralık / Seçenek | Ne Seçersen Ne Olur |
 |---|---|---|
-| `quality_mode` | `en_yuksek_kalite`, `dengeli`, `hizli_test`, `manual` | Genel kalite profili. En iyi islerde `en_yuksek_kalite`. |
-| `apply_quality_mode` | `True/False` | Secilen kalite profilini slider ayarlarina uygular. |
-| `output_size` | 1024-4096, adim 512 | Final piksel boyutu. 4096 baski ve premium teslim icin en iyisi. |
-| `error_level` | `h`, `q`, `m`, `l` | QR hata duzeltme. `h` en guvenli ve logolu tasarim icin onerilen seviye. |
-| `quiet_zone` | 4-10 | QR etrafindaki bos alan. Arttikca okuma guvenligi artar, tasarim alani azalir. |
-| `logo_aware_qr_mask_optimize` | `True/False` | QR maskesini logoya daha uyumlu secmeye calisir. Premiumda acik kalsin. |
-| `logo_aware_mask_trials` | 1-8 | Daha cok deneme daha iyi sonuc, daha yavas sure. Premium icin 8. |
-| `fit_mode` | `cover_crop`, `contain_pad` | `cover_crop`: kareye kirpar. `contain_pad`: logoyu kirpmadan boslukla oturtur. |
-| `pad_red/green/blue` | 0-255 | `contain_pad` modunda zemin rengi. Beyaz icin 255/255/255. |
-| `dark_strength_start` | 0.05-0.80 | Fusion taramasinin baslangic gucu. Dusuk deger daha yumuşak gorsel. |
-| `dark_strength_end` | 0.10-0.95 | Fusion taramasinin en guclu adayi. Yuksek deger daha belirgin QR ve daha okunabilir final. |
-| `dark_strength_step` | 0.01-0.10 | Adaylar arasi adim. 0.01-0.02 daha cok aday ve daha iyi secim, daha yavas. |
-| `light_strength_ratio` | 0.20-1.00 | Acik alanlarin fusion etkisi. Yuksek deger gorseli daha fazla hissettirir. |
-| `module_contrast` | 0.00-1.00 | QR modul kontrasti. 0.75-0.90 premium icin guvenli. |
-| `center_bias` | 0.00-1.00 | Modul merkezlerini guclendirir. Yuksek deger okuma guvenligini artirir. |
-| `finder_boost` | 1.00-2.50 | Kosedeki QR bulucu kareleri guclendirir. Premium icin 2.10-2.50. |
-| `quiet_zone_boost` | 0.00-1.00 | Sessiz bolgeyi temiz tutar. Yuksek deger taramayi iyilestirir. |
-| `contrast_after` | 1.00-1.80 | Final kontrast cilasi. Cok yuksek deger logoyu sertlestirebilir. |
+| `quality_mode` | `en_yuksek_kalite`, `dengeli`, `hizli_test`, `manual` | En yüksek kalite daha yavaş ama daha iyi sonuç arar. |
+| `output_size` | 1024-4096 | Büyük değer daha temiz baskı ve detay verir. Premium için 4096. |
+| `error_level` | `h`, `q`, `m`, `l` | Hata düzeltme. Logolu QR için `h` en güvenli. |
+| `quiet_zone` | 4-10 | QR etrafındaki boş alan. Artarsa okuma kolaylaşır, tasarım alanı azalır. |
+| `dark_strength_start/end` | 0.05-0.95 | QR etkisinin zayıftan güçlüye taranacağı aralık. End yükselirse okuma artar ama logo sertleşebilir. |
+| `dark_strength_step` | 0.01-0.10 | Küçük adım daha çok aday ve daha iyi seçim, ama daha yavaş. |
+| `module_contrast` | 0.00-1.00 | QR modül kontrastı. 0.75-0.90 güvenli. |
+| `center_bias` | 0.00-1.00 | Modül merkezlerini güçlendirir. Okumayı artırır. |
+| `finder_boost` | 1.00-2.50 | Üç köşedeki finder alanlarını güçlendirir. Premium için 2.10+. |
+| `quiet_zone_boost` | 0.00-1.00 | Dış boşluğu temiz tutar. Okumayı artırır. |
+| `contrast_after` | 1.00-1.80 | Final kontrast cilası. Fazlası logoyu sertleştirir. |
 | `sharpness_after` | 1.00-2.50 | Keskinlik. 1.40-1.60 genelde iyi. |
-| `min_decoder_passes` | 1-3 | Kac okuyucu motorunun dogru okumasini istedigin. Premiumda 2, cok kritik islerde 3. |
-| `prefer_best_score_not_first_pass` | `True/False` | Ilk okunan aday yerine en iyi skor alan adayi secer. Premiumda `True`. |
-| `save_all_candidates` | `True/False` | Tum adaylari kaydeder. Kalite kontrol icin acik kalabilir. |
-| `show_candidate_previews` | `True/False` | Adaylari ekranda gosterir. Hiz icin kapali, inceleme icin acik. |
-| `download_final` | `True/False` | Son ZIP'i Colab'dan indirir. |
+| `min_decoder_passes` | 1-3 | Kaç okuyucu motoru doğru okumalı. Teslim için 2 iyi, çok kritik işte 3. |
 
-## Blok 5 - Teslim ve Stil Ayarlari
+## Blok 5: Rakip Tarzı Halftone Ayarları
 
-| Ayar | Secenek / Aralik | Ne yapar |
+| Ayar | Aralık / Seçenek | Ne Seçersen Ne Olur |
 |---|---|---|
-| `delivery_quality_mode` | `en_yuksek_kalite`, `dengeli`, `hizli_test`, `manual` | Teslim dosyalari icin kalite profili. |
-| `apply_delivery_quality_mode` | `True/False` | Teslim kalite profilini uygular. |
-| `apply_service_tier_to_delivery` | `True/False` | Basic/Standard/Premium paketini teslim kapsamına uygular. |
-| `commercial_pack_enabled` | `True/False` | Ticari ZIP, rapor, varyasyon ve ekstra dosyalari acar/kapatir. |
-| `delivery_variant_mode` | `single_best`, `all_premium_variants` | Tek final veya tum premium varyasyonlar. Fiverr icin `all_premium_variants`. |
-| `include_unreadable_visual_variants` | `True/False` | Okunmayan ama guzel varyasyonlari ZIP'e alma. Musteriye teslim icin `False` kalmali. |
-| `master_style_choice` | `custom`, `pixel_dot_matrix`, `basic_logosuz_duz`, `design_from_logo`, `line_variations`, `qrbtf_style_pack`, `tumunu_uret` | Ana stil secimi. En kolay premium satis icin `tumunu_uret`. |
+| `make_halftone_logo_qr` | `True/False` | Logo-aware halftone üretimini açar. Rakip tarzı için açık olmalı. |
+| `use_halftone_as_final` | `True/False` | Okunabilir halftone bulunursa final yapar. |
+| `halftone_force_competitor_layout` | `True/False` | Rakip düzene öncelik verir: logo altta, halftone QR üstte. |
+| `halftone_mark_shape` | `dot`, `square`, `plus`, `diamond`, `star` | Üstteki QR işaret şekli. Rakip hissi için `plus` iyi. |
+| `halftone_density` | 0.40-1.00 | İşaretlerin doluluk oranı. Artarsa QR okunabilirliği artar, logo daha yoğun görünür. |
+| `halftone_logo_strength` | 0.20-1.00 | Logo etkisi. Artarsa logo daha net görünür. |
+| `halftone_logo_underlay_alpha` | 0.00-0.55 | Arkadaki büyük logo görünürlüğü. 0.30-0.38 rakip tarzı için iyi. |
+| `halftone_light_logo_alpha` | 0.20-1.00 | Açık alanlarda logo detayını taşıma gücü. |
+| `halftone_logo_cell_threshold` | 0.02-0.30 | Logo hücre eşiği. Düşük değer daha fazla logo detayı, yüksek değer daha sade çıktı. |
+| `halftone_background_dots` | `True/False` | Logo dışındaki QR noktalarını da çizer. Okunabilirlik için genelde açık. |
+| `halftone_designer_finders` | `True/False` | Üç köşeyi yuvarlak/tasarım finder olarak çizer. |
+| `halftone_outline_boost` | 0.00-1.00 | Logo konturunu güçlendirir. |
+| `halftone_edge_weight` | 0.00-1.50 | Logo kenarlarını daha belirgin yapar. |
+| `halftone_negative_cutout` | 0.00-1.00 | Logodaki beyaz/negatif boşlukları korur. Fazlası QR'i zayıflatabilir. |
+| `halftone_safe_background_density` | 0.30-0.95 | Logo dışındaki QR güvenlik yoğunluğu. Artarsa okuma artar. |
 
-### `master_style_choice` Ne Secilmeli?
+## Renk, Şekil ve Finder Ayarları
 
-| Secim | Sonuc |
+| Ayar | Seçenek | Açıklama |
+|---|---|---|
+| `customer_color_mode` / `color_mode` | `black_white`, `brand_color`, `two_color`, `gradient`, `image_based` | Siyah-beyaz en güvenli, marka rengi dengeli, gradient ve image_based daha sanatsal. |
+| `customer_module_shape` / `module_shape` | `square`, `rounded`, `dot`, `diamond`, `hexagon`, çizgi tipleri, `soft_blob` | Kare en güvenli, rounded/dot dengeli, çizgili şekiller görsel varyasyon için. |
+| `customer_finder_style` / `finder_style` | `classic`, `rounded`, `circle`, `planet` | Rakip tarzı için `circle`. En güvenli klasik. |
+| `background_style` | `white`, `brand_tint`, `transparent`, `artwork` | Beyaz en okunur. Artwork daha sanatsal ama riskli. |
+| `brand_tint_strength` | 0.00-0.35 | Zemin marka tonu. Fazlası okumayı azaltabilir. |
+
+## Teslim Dosyaları
+
+| Ayar | Ne Üretir |
 |---|---|
-| `pixel_dot_matrix` | Logo QR hucrelerine nokta/piksel/arti gibi yedirilir. Fiverr tarzi sanatsal isler icin iyi. |
-| `basic_logosuz_duz` | Sade, logosuz, en guvenli QR. Hizli ve risksiz isler icin. |
-| `design_from_logo` | Logo renklerini kullanan markali tasarim. Sosyal medya ve marka islerinde iyi. |
-| `line_variations` | Dikey/yatay/cizgisel QR varyasyonlari. Modern/tech tasarim isteyenlere. |
-| `qrbtf_style_pack` | QRBTF benzeri planet finder, interlock, cross, radial, diagonal line stilleri. |
-| `tumunu_uret` | Premium: tum iyi varyasyonlari, raporlari ve teslim paketini uretir. |
-| `custom` | Tum ayarlari elle kontrol etmek icin. |
+| `commercial_pack_enabled` | Teslim ZIP, rapor ve ekstra dosyaları açar. |
+| `delivery_variant_mode = single_best` | Tek en iyi final üretir. |
+| `delivery_variant_mode = all_premium_variants` | Çoklu premium varyasyon üretir. |
+| `make_print_png` | Baskı PNG. |
+| `make_print_pdf` | Baskı PDF. |
+| `make_transparent_png` | Şeffaf PNG. |
+| `make_jpg` | JPG kopya. |
+| `make_svg` | Temiz QR SVG. Sanatsal halftone raster PNG'dir. |
+| `make_layout_pack` | Kartvizit, sticker, label gibi layout dosyaları. |
+| `make_test_report` | QR okuma test raporu. |
 
-## Blok 5 - Musteri Brief Alanlari
+## Rakip Çıktısına En Yakın Başlangıç
 
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `client_name` | metin | Musteri adi, raporlara yazilir. |
-| `order_reference` | metin | Siparis numarasi veya not. |
-| `requested_style_note` | metin | Musterinin istedigi stil. |
-| `revision_note` | metin | Revizyon notu. |
-| `usage_place` | `web_only`, `print`, `web_and_print`, `menu`, `business_card`, `sticker`, `product_label`, `event_ticket`, `social_media` | Kullanim yerini rapora ve presetlere yansitir. |
-| `qr_static_or_dynamic` | `static_lifetime`, `dynamic_link_provided_by_client` | Notebook link yonetimi yapmaz; dynamic istenirse musteri dynamic link vermeli. |
-
-## Blok 5 - Frame ve Baski
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `make_scan_me_frame` | `True/False` | Final QR icin Scan Me cercevesi uretir. |
-| `scan_me_text` | metin | Cercevede yazacak metin. |
-| `scan_frame_style` | `rounded_brand`, `minimal`, `bold_label` | Cerceve stili. |
-| `print_size_preset` | `2x2_inch`, `3x3_inch`, `4x4_inch`, `custom` | Baski olcusu. Kucuk baskida temiz QR daha guvenli. |
-| `custom_print_width_in`, `custom_print_height_in` | sayi | Custom baski olcusu inch. |
-| `print_dpi` | 300, 600 | 300 yeterli, 600 premium/baski icin daha detayli. |
-
-## Blok 5 - Presetler
-
-| Ayar | Secenekler | Ne yapar |
-|---|---|---|
-| `portfolio_example` | `custom`, `restaurant_qr`, `instagram_linktree_qr`, `business_card_qr`, `product_label_qr`, `luxury_brand_qr`, `event_ticket_qr`, `colorful_logo_qr`, `black_white_clean_qr`, `halftone_logo_qr`, `social_media_preview_qr` | Musteri is tipine gore hazir paket secimi. |
-| `style_preset` | `custom`, `business_clean`, `luxury`, `colorful`, `restaurant`, `event`, `product_label`, `social_media`, `black_white_clean`, `halftone_logo` | Renk, sekil, zemin ve stil ailesini ayarlar. |
-
-## Blok 5 - Logo Ayarlari
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `logo_source_mode` | `uploaded_artwork`, `none` | Logo kullan veya logosuz QR uret. |
-| `logo_mode` | `none`, `center_badge`, `center_transparent`, `background_logo`, `corner_small`, `logo_under_qr`, `qr_over_logo_soft` | Logonun QR icindeki yerlesimi. En guvenli: `center_badge`. En sanatsal: `qr_over_logo_soft` veya halftone final. |
-| `logo_size_ratio` | 0.08-0.26 | Logo boyutu. Buyudukce marka gorunur, okuma riski artar. |
-| `logo_badge_shape` | `rounded_square`, `circle`, `square` | Logo arkasindaki rozet sekli. |
-| `logo_badge_opacity` | 0.40-1.00 | Rozet opakligi. Yuksek deger daha okunur ve temiz. |
-| `logo_badge_padding` | 0.05-0.45 | Logo etrafindaki rozet boslugu. Arttikca okuma guvenligi artar. |
-| `logo_visual_strength` | 0.20-1.00 | Logo renk/kontrast etkisi. |
-| `logo_auto_readability_guard` | `True/False` | Logo yerlesimini okunabilirlik testine gore korur. Teslimde acik kalsin. |
-| `brand_text` | metin | Layout dosyalarinda marka basligi. |
-| `logo_mode_from_preset` | `True/False` | Preset logo modunu zorlasin mi? Genelde `False`. |
-
-## Blok 5 - Logo Hazirlama
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `logo_prep_enabled` | `True/False` | Logoyu buyutme, temizleme ve keskinlestirme hazirligini acar. |
-| `logo_upscale_engine` | `none`, `opencv_lanczos` | Dusuk cozunurluklu logoyu daha temiz buyutur. |
-| `logo_upscale_factor` | 1-4 | Logo buyutme katsayisi. Premium icin 4. |
-| `logo_denoise` | `none`, `light`, `medium` | Gurultu temizleme. Cok detayli logoda fazla artirma. |
-| `logo_sharpen` | `none`, `light`, `medium`, `strong` | Logoyu keskinlestirir. Premium icin `strong` genelde iyi. |
-
-## Blok 5 - QR Stil Ayarlari
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `module_shape` | `square`, `rounded`, `dot`, `diamond`, `hexagon`, `vertical_line`, `horizontal_line`, `diagonal_tl_br`, `diagonal_tr_bl`, `cross_line`, `interlock_line`, `radial_line`, `soft_blob` | QR veri modullerinin sekli. `square` en guvenli, `dot/rounded` dengeli, line sekilleri daha sanatsal. |
-| `finder_style` | `classic`, `rounded`, `circle`, `planet` | Kose bulucu stilleri. `classic` en guvenli, `planet` QRBTF tarzi gorsel etki verir. |
-| `color_mode` | `black_white`, `brand_color`, `two_color`, `gradient`, `image_based` | QR renk mantigi. En guvenli `black_white`, markali is icin `brand_color`, sanatsal is icin `image_based/gradient`. |
-| `dark_hex`, `brand_hex`, `gradient_start_hex`, `gradient_end_hex`, `light_hex` | hex renk | QR koyu, marka, gradient ve zemin renkleri. Koyu/acik kontrast yuksek olmali. |
-| `background_style` | `white`, `brand_tint`, `transparent`, `artwork` | Zemin. En okunur `white`, en sanatsal `artwork`, teslim icin transparent ek dosya olarak iyi. |
-| `brand_tint_strength` | 0.00-0.35 | Marka renkli zemin yogunlugu. Fazla artarsa okuma riski artabilir. |
-
-## Blok 5 - Halftone Logo Ayarlari
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `make_halftone_logo_qr` | `True/False` | Logo-aware halftone QR uretir. Premium islerde acik. |
-| `use_halftone_as_final` | `True/False` | Okunabilir halftone bulunursa final olarak secer. |
-| `halftone_mark_shape` | `dot`, `square`, `plus`, `diamond`, `star` | Logo/QR hucrelerinin isaret sekli. `plus` Fiverr tarzi icin guclu. |
-| `halftone_density` | 0.40-1.00 | Nokta/sekil dolulugu. Yuksek deger daha koyu ve okunur, cok yuksek deger logoyu sertlestirir. |
-| `halftone_logo_strength` | 0.20-1.00 | Logo etkisi. Yuksek deger logo daha belirgin. |
-| `halftone_logo_forward` | `True/False` | Logoyu one cikarir. |
-| `halftone_light_logo_alpha` | 0.20-1.00 | Acik logo katmani gucu. |
-| `halftone_logo_cell_threshold` | 0.02-0.30 | Logo hucre esigi. Dusuk deger daha fazla logo detayi, yuksek deger daha sade. |
-| `halftone_background_dots` | `True/False` | Arka plan noktalarini da cizer. |
-| `halftone_designer_finders` | `True/False` | Kose finder alanlarini tasarimla guclendirir. |
-| `halftone_logo_aware_mode` | `True/False` | Logo kontur/ic dolgu/halo analizini kullanir. Premiumda acik. |
-| `halftone_outline_boost` | 0.00-1.00 | Logo konturunu guclendirir. |
-| `halftone_edge_weight` | 0.00-1.50 | Kenar algisi agirligi. Yuksek deger logo sinirlarini belirgin yapar. |
-| `halftone_negative_cutout` | 0.00-1.00 | Logo etrafinda negatif bosluk etkisi. Fazlasi QR'i zayiflatabilir. |
-| `halftone_safe_background_density` | 0.30-0.95 | Arka plan QR guvenlik yogunlugu. Yuksek deger daha okunur. |
-
-## Blok 5 - Teslim Dosyalari
-
-| Ayar | Secenek / Aralik | Ne yapar |
-|---|---|---|
-| `make_soft_balanced_strong` | `True/False` | Soft, balanced, strong sanat varyasyonlari uretir. |
-| `make_styled_clean_qr` | `True/False` | Stilize ama temiz QR uretir. |
-| `make_social_preview` | `True/False` | 1080x1080 sosyal medya onizleme. |
-| `make_print_png` | `True/False` | DPI bilgili print PNG. |
-| `make_print_pdf` | `True/False` | Print PDF. |
-| `make_transparent_png` | `True/False` | Transparent QR dosyasi. |
-| `make_jpg` | `True/False` | JPG kopya. |
-| `make_svg` | `True/False` | Clean QR SVG. Sanatsal halftone final rasterdir. |
-| `make_eps` | `True/False` | Clean QR EPS. |
-| `make_layout_pack` | `True/False` | Sticker, business card, label layout dosyalari. |
-| `make_test_report` | `True/False` | QR test raporu. |
-
-## Blok 10 ve 11 - Inceleme / Manuel Secim
-
-| Ayar | Ne yapar |
+| Ayar | Değer |
 |---|---|
-| `inspect_candidate_path` | Belirli aday dosyasini ekranda temiz QR ve artwork ile yan yana gosterir. |
-| `manual_final_path` | Otomatik final yerine okunabilir bir adayi manuel final yapar. Okunmuyorsa kabul etmez. |
-
-## En Kaliteli Premium Sonuc Icin Net Ayarlar
-
-En iyi Fiverr teslimi icin su ayarlarla basla:
-
-| Ayar | Deger |
-|---|---|
+| `customer_id` | `murat` |
+| `client_name` | `Murat` |
 | `service_tier` | `premium` |
 | `quality_mode` | `en_yuksek_kalite` |
-| `delivery_quality_mode` | `en_yuksek_kalite` |
-| `master_style_choice` | `tumunu_uret` |
-| `delivery_variant_mode` | `all_premium_variants` |
+| `master_style_choice` | `competitor_logo_halftone` |
 | `output_size` | `4096` |
 | `error_level` | `h` |
 | `quiet_zone` | `5` veya `6` |
-| `logo_aware_qr_mask_optimize` | `True` |
-| `logo_aware_mask_trials` | `8` |
-| `dark_strength_start` | `0.22` |
-| `dark_strength_end` | `0.94` |
-| `dark_strength_step` | `0.02` |
-| `module_contrast` | `0.85` |
-| `center_bias` | `0.90` |
-| `finder_boost` | `2.35` |
-| `quiet_zone_boost` | `0.90` |
-| `contrast_after` | `1.18` |
-| `sharpness_after` | `1.55` |
-| `min_decoder_passes` | `2` |
-| `prefer_best_score_not_first_pass` | `True` |
-| `logo_prep_enabled` | `True` |
-| `logo_upscale_factor` | `4` |
-| `logo_denoise` | `medium` |
-| `logo_sharpen` | `strong` |
+| `finder_style` | `circle` |
 | `make_halftone_logo_qr` | `True` |
 | `use_halftone_as_final` | `True` |
+| `halftone_force_competitor_layout` | `True` |
 | `halftone_mark_shape` | `plus` |
 | `halftone_density` | `0.94`-`0.96` |
-| `halftone_logo_strength` | `0.94`-`0.96` |
-| `halftone_logo_aware_mode` | `True` |
-| `make_print_png/pdf/social_preview/transparent_png/jpg/svg/layout_pack/test_report` | `True` |
+| `halftone_logo_strength` | `0.96`-`0.98` |
+| `halftone_logo_underlay_alpha` | `0.30`-`0.38` |
+| `halftone_logo_cell_threshold` | `0.035`-`0.055` |
+| `halftone_designer_finders` | `True` |
+| `min_decoder_passes` | `2` |
 
-Pratik kural: Temiz ve yuksek cozunurluklu logo yukle, cok uzun URL yerine kisa link kullan, final ZIP olussa bile `final_readable_art_qr.png` dosyasini telefondan manuel okut. Musteriye sadece testten gecen dosyalari teslim et; `include_unreadable_visual_variants` kapali kalsin.
+## Sorun Çıkarsa
+
+| Sorun | Ne Yap |
+|---|---|
+| QR okunmuyor | `finder_boost`, `module_contrast`, `quiet_zone_boost`, `halftone_safe_background_density` artır. |
+| Logo çok silik | `halftone_logo_strength`, `halftone_logo_underlay_alpha`, `halftone_light_logo_alpha` artır. |
+| Logo çok karışık | `halftone_logo_cell_threshold` artır, `halftone_density` biraz düşür. |
+| Köşeler zayıf | `finder_style = "circle"`, `halftone_designer_finders = True`, `finder_boost` artır. |
+| Çıktı çok sert | `contrast_after`, `sharpness_after`, `halftone_density` biraz düşür. |
+| Müşteri baskı istiyor | `output_size = 4096`, `print_dpi = 300` veya `600`, `error_level = "h"`. |
+
